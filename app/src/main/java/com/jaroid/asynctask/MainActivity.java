@@ -9,9 +9,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoadImageAsyncTask.ILoadingImageAsyncListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoadImageAsyncTask.ILoadingImageAsyncListener, LoadContentAsyncTask.ILoadingContentListener {
 
     private LoadImageAsyncTask loadImageAsyncTask;
+    private LoadContentAsyncTask loadContentAsyncTask;
     private ImageView imgHeader;
     private TextView tvContent, tvError;
     private Button btnLoadImage, btnLoadContent;
@@ -54,7 +55,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void loadContent() {
         hideErrorMessage();
-
+        loadContentAsyncTask = new LoadContentAsyncTask(this);
+        loadContentAsyncTask.execute(CONTENT_API);
     }
 
     private void loadImage() {
@@ -89,5 +91,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void hideLoading() {
         vLoading.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onLoadingContentSuccess(String content) {
+        hideLoading();
+        tvContent.setText(content);
+    }
+
+    @Override
+    public void onLoadingContentError(String message) {
+        hideLoading();
+        tvError.setText(message);
     }
 }
