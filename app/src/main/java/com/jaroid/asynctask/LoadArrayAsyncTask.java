@@ -3,6 +3,7 @@ package com.jaroid.asynctask;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,18 +13,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 
-public class LoadContentAsyncTask extends AsyncTask<String, Integer, String> {
+public class LoadArrayAsyncTask extends AsyncTask<String, Integer, String> {
 
-    private ILoadingContentListener listener;
-    private String message;
+    private LoadContentAsyncTask.ILoadingContentListener listener;
 
-    public LoadContentAsyncTask(ILoadingContentListener listener) {
+    public LoadArrayAsyncTask(LoadContentAsyncTask.ILoadingContentListener listener) {
         this.listener = listener;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
     }
 
     @Override
@@ -40,7 +35,7 @@ public class LoadContentAsyncTask extends AsyncTask<String, Integer, String> {
                 content.append((char) charactor);
             }
         } catch (IOException e) {
-            message = e.getMessage();
+//            message = e.getMessage();
             e.printStackTrace();
         }
 
@@ -51,27 +46,26 @@ public class LoadContentAsyncTask extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
+        Log.d("TAG", "onPostExecute: " + s);
         try {
-            JSONObject jsonObject = new JSONObject(s);
-            String content = jsonObject.getString("body");
-            String cover = jsonObject.getString("cover");
-            int id = jsonObject.getInt("id");
-            Log.d("TAG", "onPostExecute: "+cover+" \n id : "+id);
-            listener.onLoadingContentSuccess(content);
+            JSONArray jsonArray = new JSONArray(s);
+
+            String output = "";
+            Log.d("TAG", "onPostExecute: " + jsonArray.length());
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = (JSONObject) jsonArray.get(i);
+                String content = jsonObject.getString("body");
+                String cover = jsonObject.getString("cover");
+                String title = jsonObject.getString("title");
+                int id = jsonObject.getInt("id");
+                output += title+" ";
+                Log.d("TAG", "onPostExecute: " + cover + " \n id : " + id);
+                listener.onLoadingContentSuccess(output);
+            }
+
         } catch (JSONException e) {
-            message = e.getMessage();
             e.printStackTrace();
         }
 
-        if (message != null) {
-            listener.onLoadingContentError(message);
-        }
-    }
-
-    public interface ILoadingContentListener {
-
-        void onLoadingContentSuccess(String content);
-
-        void onLoadingContentError(String message);
     }
 }

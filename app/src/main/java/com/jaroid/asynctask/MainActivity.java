@@ -12,7 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoadImageAsyncTask.ILoadingImageAsyncListener, LoadContentAsyncTask.ILoadingContentListener {
 
     private LoadImageAsyncTask loadImageAsyncTask;
-    private LoadContentAsyncTask loadContentAsyncTask;
+//    private LoadContentAsyncTask loadContentAsyncTask;
+    private LoadArrayAsyncTask loadContentAsyncTask;
     private ImageView imgHeader;
     private TextView tvContent, tvError;
     private Button btnLoadImage, btnLoadContent, btnSum, btnNull;
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static final String IMAGE_URL = "https://picsum.photos/seed/22444/1920/270";
     public static final String CONTENT_API = "https://mockend.com/imthanhhai217/demo_api/posts/1";
+    public static final String CONTENTS_API = "https://mockend.com/imthanhhai217/demo_api/posts";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void loadContent() {
         hideErrorMessage();
-        loadContentAsyncTask = new LoadContentAsyncTask(this);
-        loadContentAsyncTask.execute(CONTENT_API);
+        loadContentAsyncTask = new LoadArrayAsyncTask(this);
+        loadContentAsyncTask.execute(CONTENTS_API);
     }
 
     private void loadImage() {
