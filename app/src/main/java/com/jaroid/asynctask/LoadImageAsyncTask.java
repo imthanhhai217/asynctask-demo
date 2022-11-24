@@ -29,7 +29,6 @@ public class LoadImageAsyncTask extends AsyncTask<String, Integer, Bitmap> {
     protected Bitmap doInBackground(String... strings) {
         String url = strings[0];
         Bitmap mBitmap = null;
-
         try {
             InputStream inputStream = new URL(url).openStream();
             mBitmap = BitmapFactory.decodeStream(inputStream);
@@ -37,8 +36,12 @@ public class LoadImageAsyncTask extends AsyncTask<String, Integer, Bitmap> {
             message = e.getMessage();
             e.printStackTrace();
         }
-
         return mBitmap;
+    }
+
+    @Override
+    protected void onProgressUpdate(Integer... values) {
+        super.onProgressUpdate(values);
     }
 
     @Override

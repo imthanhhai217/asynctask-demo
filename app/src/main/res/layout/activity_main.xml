@@ -25,11 +25,11 @@
         android:id="@+id/tvContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:layout_margin="20sp"
+        android:gravity="center"
         android:hint="content"
-        android:textSize="15sp"
         android:textColor="@color/gray"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/imgHeader" />
@@ -46,6 +46,37 @@
         app:layout_constraintBottom_toTopOf="@id/llFunction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/llFunctionB"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="10dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toTopOf="@id/tvError"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <Button
+            android:id="@+id/btnNull"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:enabled="true"
+            android:text="null" />
+
+        <Button
+            android:id="@+id/btnSum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_weight="1"
+            android:text="Sum" />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/llFunction"
