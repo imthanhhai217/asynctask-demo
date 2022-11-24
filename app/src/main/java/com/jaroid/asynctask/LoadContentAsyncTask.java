@@ -34,21 +34,23 @@ public class LoadContentAsyncTask extends AsyncTask<String, Integer, String> {
             InputStream inputStream = new URL(url).openStream();
             InputStreamReader reader = new InputStreamReader(inputStream);
             BufferedReader bufferedReader = new BufferedReader(reader);
-            while (bufferedReader.read() != -1) {
-                content.append(content);
+
+            int charactor;
+            while ((charactor = bufferedReader.read()) != -1) {
+                content.append((char) charactor);
             }
         } catch (IOException e) {
             message = e.getMessage();
             e.printStackTrace();
         }
 
+        Log.d("TAG", "doInBackground: \n" + content);
         return content.toString();
     }
 
     @Override
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
-        Log.d("TAG", "onPostExecute: " + s);
         try {
             JSONObject jsonObject = new JSONObject(s);
             String content = jsonObject.getString("body");
