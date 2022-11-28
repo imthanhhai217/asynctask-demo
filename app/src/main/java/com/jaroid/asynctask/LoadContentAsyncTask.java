@@ -56,8 +56,7 @@ public class LoadContentAsyncTask extends AsyncTask<String, Integer, String> {
             String content = jsonObject.getString("body");
             String cover = jsonObject.getString("cover");
             int id = jsonObject.getInt("id");
-            Log.d("TAG", "onPostExecute: "+cover+" \n id : "+id);
-            listener.onLoadingContentSuccess(content);
+            Log.d("TAG", "onPostExecute: " + cover + " \n id : " + id);
         } catch (JSONException e) {
             message = e.getMessage();
             e.printStackTrace();
@@ -70,7 +69,7 @@ public class LoadContentAsyncTask extends AsyncTask<String, Integer, String> {
 
     public interface ILoadingContentListener {
 
-        void onLoadingContentSuccess(String content);
+        void onLoadingContentSuccess(String contents);
 
         void onLoadingContentError(String message);
     }

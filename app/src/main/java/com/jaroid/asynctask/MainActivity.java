@@ -8,16 +8,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, LoadImageAsyncTask.ILoadingImageAsyncListener, LoadContentAsyncTask.ILoadingContentListener {
+import java.util.ArrayList;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+        LoadImageAsyncTask.ILoadingImageAsyncListener, LoadArrayAsyncTask.ILoadingContentsListener {
 
     private LoadImageAsyncTask loadImageAsyncTask;
-//    private LoadContentAsyncTask loadContentAsyncTask;
+    //    private LoadContentAsyncTask loadContentAsyncTask;
     private LoadArrayAsyncTask loadContentAsyncTask;
     private ImageView imgHeader;
     private TextView tvContent, tvError;
     private Button btnLoadImage, btnLoadContent, btnSum, btnNull;
     private View vLoading;
+    private RecyclerView rvContent;
+
+    private ArrayList<Content> mListContents;
+    private ContentAdapter mContentAdapter;
 
     public static final String IMAGE_URL = "https://picsum.photos/seed/22444/1920/270";
     public static final String CONTENT_API = "https://mockend.com/imthanhhai217/demo_api/posts/1";
@@ -27,7 +35,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initData();
         initView();
+    }
+
+    private void initData() {
+        mListContents = new ArrayList<>();
+        mListContents.clear();
     }
 
     private void initView() {
@@ -39,6 +53,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnLoadImage = findViewById(R.id.btnLoadImage);
         btnLoadContent = findViewById(R.id.btnLoadContent);
         vLoading = findViewById(R.id.vLoading);
+        rvContent = findViewById(R.id.rvContent);
+
+        mContentAdapter = new ContentAdapter(mListContents);
+        rvContent.setAdapter(mContentAdapter);
 
         btnLoadImage.setOnClickListener(this);
         btnLoadContent.setOnClickListener(this);
@@ -138,14 +156,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onLoadingContentSuccess(String content) {
+    public void onLoadingContentsSuccess(ArrayList<Content> contents) {
         hideLoading();
-        tvContent.setText(content);
+        if (contents.size() > 0){
+            mContentAdapter.updateData(contents);
+        }
     }
 
     @Override
-    public void onLoadingContentError(String message) {
-        hideLoading();
-        tvError.setText(message);
+    public void onLoadingContentsError(String message) {
+
     }
 }

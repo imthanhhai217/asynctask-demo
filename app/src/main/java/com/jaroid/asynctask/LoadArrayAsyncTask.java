@@ -12,12 +12,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class LoadArrayAsyncTask extends AsyncTask<String, Integer, String> {
 
-    private LoadContentAsyncTask.ILoadingContentListener listener;
+    private ILoadingContentsListener listener;
 
-    public LoadArrayAsyncTask(LoadContentAsyncTask.ILoadingContentListener listener) {
+    public LoadArrayAsyncTask(ILoadingContentsListener listener) {
         this.listener = listener;
     }
 
@@ -49,23 +50,37 @@ public class LoadArrayAsyncTask extends AsyncTask<String, Integer, String> {
         Log.d("TAG", "onPostExecute: " + s);
         try {
             JSONArray jsonArray = new JSONArray(s);
+            ArrayList<Content> data = new ArrayList<>();
 
             String output = "";
             Log.d("TAG", "onPostExecute: " + jsonArray.length());
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = (JSONObject) jsonArray.get(i);
-                String content = jsonObject.getString("body");
+                Content content = new Content();
+                String body = jsonObject.getString("body");
+                content.setBody(body);
                 String cover = jsonObject.getString("cover");
+                content.setCover(cover);
                 String title = jsonObject.getString("title");
+                content.setTitle(title);
                 int id = jsonObject.getInt("id");
-                output += title+" ";
+                output += title + " ";
                 Log.d("TAG", "onPostExecute: " + cover + " \n id : " + id);
-                listener.onLoadingContentSuccess(output);
+
+                data.add(content);
             }
+            listener.onLoadingContentsSuccess(data);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+    }
+
+    public interface ILoadingContentsListener {
+
+        void onLoadingContentsSuccess(ArrayList<Content> contents);
+
+        void onLoadingContentsError(String message);
     }
 }
